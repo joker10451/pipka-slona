@@ -172,13 +172,11 @@
 
         .button-container {
             display: flex;
-            gap: 1rem;
             justify-content: center;
             margin-top: 30px;
-            flex-wrap: wrap;
         }
 
-        .telegram-button, .youtube-button {
+        .telegram-button {
             display: inline-flex;
             align-items: center;
             padding: 12px 25px;
@@ -187,45 +185,19 @@
             border-radius: 50px;
             font-size: 1.2rem;
             transition: all 0.3s ease;
-        }
-
-        .telegram-button {
             background-color: #0088cc;
             box-shadow: 0 4px 15px rgba(0, 136, 204, 0.4);
         }
 
-        .youtube-button {
-            background-color: #ff0000;
-            box-shadow: 0 4px 15px rgba(255, 0, 0, 0.4);
-        }
-
-        .telegram-button i, .youtube-button i {
+        .telegram-button i {
             margin-right: 10px;
             font-size: 1.4rem;
         }
 
-        .telegram-button:hover, .youtube-button:hover {
-            transform: translateY(-2px);
-        }
-
         .telegram-button:hover {
+            transform: translateY(-2px);
             background-color: #006699;
             box-shadow: 0 6px 20px rgba(0, 136, 204, 0.6);
-        }
-
-        .youtube-button:hover {
-            background-color: #cc0000;
-            box-shadow: 0 6px 20px rgba(255, 0, 0, 0.6);
-        }
-
-        .share-button {
-            background-color: #4CAF50;
-            box-shadow: 0 4px 15px rgba(76, 175, 80, 0.4);
-        }
-
-        .share-button:hover {
-            background-color: #388E3C;
-            box-shadow: 0 6px 20px rgba(76, 175, 80, 0.6);
         }
 
         .notification {
@@ -347,14 +319,6 @@
                 <i class="fab fa-telegram-plane"></i>
                 Открыть в Telegram
             </a>
-            <a href="https://youtu.be/AJVNYYS_Fjg" class="youtube-button" target="_blank">
-                <i class="fab fa-youtube"></i>
-                Смотреть на YouTube
-            </a>
-            <button onclick="shareLink()" class="telegram-button share-button">
-                <i class="fas fa-share-alt"></i>
-                Поделиться
-            </button>
         </div>
     </div>
 

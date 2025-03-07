@@ -4,9 +4,35 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Пипка слона</title>
+    
+    <!-- Meta tags for social sharing -->
+    <meta property="og:title" content="Пипка слона">
+    <meta property="og:description" content="Забавный веб-сайт с ASCII-артом и фоновым видео">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://joker10451.github.io/pipka-slona/">
+    
+    <!-- Favicon -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🐘</text></svg>">
+    
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
+        :root {
+            --bg-color: #ffffff;
+            --text-color: #333333;
+            --container-bg: rgba(255, 255, 255, 0.95);
+            --ascii-color: #666666;
+            --shadow-color: rgba(0, 0, 0, 0.2);
+        }
+
+        [data-theme="dark"] {
+            --bg-color: #1a1a1a;
+            --text-color: #ffffff;
+            --container-bg: rgba(40, 40, 40, 0.95);
+            --ascii-color: #cccccc;
+            --shadow-color: rgba(0, 0, 0, 0.4);
+        }
+
         * {
             box-sizing: border-box;
         }
@@ -17,9 +43,9 @@
         }
 
         @keyframes float {
-            0% { transform: translateY(0px); }
-            50% { transform: translateY(-10px); }
-            100% { transform: translateY(0px); }
+            0% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-10px) rotate(2deg); }
+            100% { transform: translateY(0px) rotate(0deg); }
         }
 
         body {
@@ -32,6 +58,28 @@
             font-family: 'Montserrat', sans-serif;
             position: relative;
             overflow: hidden;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            transition: all 0.3s ease;
+        }
+
+        .theme-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: none;
+            border: none;
+            color: var(--text-color);
+            font-size: 24px;
+            cursor: pointer;
+            z-index: 1000;
+            padding: 10px;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+        }
+
+        .theme-toggle:hover {
+            transform: rotate(45deg);
         }
 
         .youtube-background {
@@ -65,9 +113,9 @@
         
         .text-container {
             padding: 3rem;
-            background-color: rgba(255, 255, 255, 0.95);
+            background-color: var(--container-bg);
             border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 10px 30px var(--shadow-color);
             transform: scale(1);
             transition: all 0.3s ease;
             text-align: center;
@@ -84,10 +132,10 @@
         h1 {
             margin: 0;
             font-size: 3.5rem;
-            color: #333;
+            color: var(--text-color);
             text-align: center;
             font-weight: 600;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+            text-shadow: 2px 2px 4px var(--shadow-color);
         }
 
         .ascii-container {
@@ -95,19 +143,31 @@
             justify-content: center;
             gap: 2rem;
             margin: 20px 0;
+            perspective: 1000px;
         }
 
         .ascii-art {
             font-family: monospace;
             white-space: pre;
             font-size: 14px;
-            color: #666;
+            color: var(--ascii-color);
             animation: float 3s ease-in-out infinite;
             user-select: none;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .ascii-art:hover {
+            transform: scale(1.1) rotate(5deg);
+            color: #ff6b6b;
         }
 
         .ascii-art.elephant {
             animation-delay: 1.5s;
+        }
+
+        .ascii-art.elephant:hover {
+            color: #4ecdc4;
         }
 
         .button-container {
@@ -243,6 +303,9 @@
     </style>
 </head>
 <body>
+    <button class="theme-toggle" onclick="toggleTheme()">
+        <i class="fas fa-moon"></i>
+    </button>
     <div class="youtube-background" id="player"></div>
     <div class="overlay"></div>
     <button class="play-button" id="playButton">
@@ -360,6 +423,32 @@
                 }, 2000);
             });
         }
+
+        function toggleTheme() {
+            const body = document.body;
+            const icon = document.querySelector('.theme-toggle i');
+            
+            if (body.getAttribute('data-theme') === 'dark') {
+                body.removeAttribute('data-theme');
+                icon.className = 'fas fa-moon';
+            } else {
+                body.setAttribute('data-theme', 'dark');
+                icon.className = 'fas fa-sun';
+            }
+        }
+
+        // Save theme preference
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme === 'dark') {
+            document.body.setAttribute('data-theme', 'dark');
+            document.querySelector('.theme-toggle i').className = 'fas fa-sun';
+        }
+
+        // Update theme preference
+        document.querySelector('.theme-toggle').addEventListener('click', () => {
+            const currentTheme = document.body.getAttribute('data-theme') || 'light';
+            localStorage.setItem('theme', currentTheme === 'light' ? 'dark' : 'light');
+        });
     </script>
 </body>
 </html> 

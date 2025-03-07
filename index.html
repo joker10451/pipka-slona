@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Пипка слона</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Montserrat', sans-serif;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .youtube-background {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            min-width: 100%;
+            min-height: 100%;
+            width: auto;
+            height: auto;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        .youtube-background iframe {
+            width: 100vw;
+            height: 100vh;
+            transform: scale(1.5);
+        }
+
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: -1;
+        }
+        
+        .text-container {
+            padding: 3rem;
+            background-color: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            transform: scale(1);
+            transition: all 0.3s ease;
+            text-align: center;
+            animation: fadeIn 1s ease-out;
+            backdrop-filter: blur(10px);
+            z-index: 1;
+        }
+
+        .text-container:hover {
+            transform: scale(1.05);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        h1 {
+            margin: 0;
+            font-size: 3.5rem;
+            color: #333;
+            text-align: center;
+            font-weight: 600;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .ascii-container {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin: 20px 0;
+        }
+
+        .ascii-art {
+            font-family: monospace;
+            white-space: pre;
+            font-size: 14px;
+            color: #666;
+            animation: float 3s ease-in-out infinite;
+            user-select: none;
+        }
+
+        .ascii-art.elephant {
+            animation-delay: 1.5s;
+        }
+
+        .button-container {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+
+        .telegram-button, .youtube-button {
+            display: inline-flex;
+            align-items: center;
+            padding: 12px 25px;
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+        }
+
+        .telegram-button {
+            background-color: #0088cc;
+            box-shadow: 0 4px 15px rgba(0, 136, 204, 0.4);
+        }
+
+        .youtube-button {
+            background-color: #ff0000;
+            box-shadow: 0 4px 15px rgba(255, 0, 0, 0.4);
+        }
+
+        .telegram-button i, .youtube-button i {
+            margin-right: 10px;
+            font-size: 1.4rem;
+        }
+
+        .telegram-button:hover, .youtube-button:hover {
+            transform: translateY(-2px);
+        }
+
+        .telegram-button:hover {
+            background-color: #006699;
+            box-shadow: 0 6px 20px rgba(0, 136, 204, 0.6);
+        }
+
+        .youtube-button:hover {
+            background-color: #cc0000;
+            box-shadow: 0 6px 20px rgba(255, 0, 0, 0.6);
+        }
+
+        .share-button {
+            background-color: #4CAF50;
+            box-shadow: 0 4px 15px rgba(76, 175, 80, 0.4);
+        }
+
+        .share-button:hover {
+            background-color: #388E3C;
+            box-shadow: 0 6px 20px rgba(76, 175, 80, 0.6);
+        }
+
+        .notification {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%) translateY(-100px);
+            background-color: #4CAF50;
+            color: white;
+            padding: 16px 32px;
+            border-radius: 50px;
+            font-size: 1rem;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s ease;
+            z-index: 1000;
+        }
+
+        .notification.show {
+            transform: translateX(-50%) translateY(0);
+        }
+
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 2.5rem;
+            }
+            .text-container {
+                padding: 2rem;
+                margin: 1rem;
+            }
+            .ascii-art {
+                font-size: 10px;
+            }
+            .ascii-container {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            .button-container {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .youtube-background iframe {
+                transform: scale(2);
+            }
+        }
+
+        .play-button {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: rgba(255, 255, 255, 0.9);
+            border: none;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: #333;
+            transition: all 0.3s ease;
+            z-index: 100;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .play-button:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .play-button.playing {
+            background-color: rgba(255, 0, 0, 0.9);
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="youtube-background" id="player"></div>
+    <div class="overlay"></div>
+    <button class="play-button" id="playButton">
+        <i class="fas fa-play" id="playIcon"></i>
+    </button>
+    <div id="notification" class="notification">Ссылка скопирована!</div>
+    <div class="text-container">
+        <h1>Пипка слона</h1>
+        <div class="ascii-container">
+            <div class="ascii-art">
+              ▄▄▄▄▄▄▄
+             █       █
+            █         █
+            █         █
+             █       █
+              █     █
+               █   █
+                █ █
+                 █
+            </div>
+            <div class="ascii-art elephant">
+                  ___  
+            ____/   \    
+           /    \   /
+          /      \_/
+         |    ___|   
+         |   (o o)   
+         |   ( - )  
+          \  /   \  
+           \|_____|
+            ||   ||
+            ||   ||
+            ||   ||
+            --   --
+            </div>
+        </div>
+        <div class="button-container">
+            <a href="https://t.me/Bladbes" class="telegram-button">
+                <i class="fab fa-telegram-plane"></i>
+                Открыть в Telegram
+            </a>
+            <a href="https://youtu.be/AJVNYYS_Fjg" class="youtube-button" target="_blank">
+                <i class="fab fa-youtube"></i>
+                Смотреть на YouTube
+            </a>
+            <button onclick="shareLink()" class="telegram-button share-button">
+                <i class="fas fa-share-alt"></i>
+                Поделиться
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // Load YouTube API
+        var tag = document.createElement('script');
+        tag.src = "https://www.youtube.com/iframe_api";
+        var firstScriptTag = document.getElementsByTagName('script')[0];
+        firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+        var player;
+        var isPlaying = false;
+
+        function onYouTubeIframeAPIReady() {
+            player = new YT.Player('player', {
+                width: '100%',
+                height: '100%',
+                videoId: 'AJVNYYS_Fjg',
+                playerVars: {
+                    'autoplay': 0,
+                    'controls': 0,
+                    'loop': 1,
+                    'playlist': 'AJVNYYS_Fjg',
+                    'showinfo': 0,
+                    'rel': 0,
+                    'enablejsapi': 1,
+                    'modestbranding': 1
+                },
+                events: {
+                    'onReady': onPlayerReady,
+                    'onStateChange': onPlayerStateChange
+                }
+            });
+        }
+
+        function onPlayerReady(event) {
+            // Player is ready
+            document.getElementById('playButton').addEventListener('click', function() {
+                if (isPlaying) {
+                    player.pauseVideo();
+                    isPlaying = false;
+                    document.getElementById('playIcon').className = 'fas fa-play';
+                    document.getElementById('playButton').classList.remove('playing');
+                } else {
+                    player.playVideo();
+                    isPlaying = true;
+                    document.getElementById('playIcon').className = 'fas fa-pause';
+                    document.getElementById('playButton').classList.add('playing');
+                }
+            });
+        }
+
+        function onPlayerStateChange(event) {
+            if (event.data === YT.PlayerState.ENDED) {
+                player.playVideo();
+            }
+        }
+
+        function shareLink() {
+            const url = window.location.href;
+            navigator.clipboard.writeText(url).then(() => {
+                const notification = document.getElementById('notification');
+                notification.classList.add('show');
+                setTimeout(() => {
+                    notification.classList.remove('show');
+                }, 2000);
+            });
+        }
+    </script>
+</body>
+</html> 
